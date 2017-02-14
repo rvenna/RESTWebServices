@@ -12,29 +12,47 @@
   <param-name>resteasy.scan</param-name>
   <param-value>true</param-value>
  </context-param>
+ <!-- 
  <context-param>
   <param-name>resteasy.servlet.mapping.prefix</param-name>
   <param-value>/rest</param-value>
  </context-param>
+  -->
  <context-param>
     <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
     <param-value>true</param-value>
 </context-param>
-
+<!-- 
 <listener>
   <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 </listener>
-
+ -->
+<!-- 
 <servlet>
   <servlet-name>resteasy-servlet</servlet-name>
   <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 </servlet>
+ -->
+ 
+<!-- <servlet>
+  <servlet-name>com.abonado.service.RestWebServicesApplication</servlet-name>
+  <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.abonado.service.RestWebServicesApplication</param-value>
+   </init-param>
+</servlet> -->
 
+<!-- 
 <servlet-mapping>
   <servlet-name>resteasy-servlet</servlet-name>
   <url-pattern>/rest/*</url-pattern>
 </servlet-mapping>
- 
+ -->
+
+<servlet-mapping>
+ 	<servlet-name>com.abonado.service.RestWebServicesApplication</servlet-name>
+  	<url-pattern>/rest-app/*</url-pattern> 
+</servlet-mapping>
  
  
  </web-app>
