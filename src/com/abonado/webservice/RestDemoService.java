@@ -1,6 +1,7 @@
 package com.abonado.webservice;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import com.abonado.service.SecurityUtil;
@@ -149,12 +152,20 @@ public class RestDemoService {
 	@GET
 	@Produces("application/pdf")
 	public Response getPDFFile(){
-		
-		File file = new File("D:\\Certification\\Webservices\\Java Web Services Up and Running, 2nd Edition.pdf");
-		
-		ResponseBuilder responseBuilder = Response.ok((Object)file);
-		responseBuilder.header("Content-Disposition","attachment; filename=java-webservices-up-and-running");
-		return responseBuilder.build();
+		try{
+				InputStream inputStream = getClass().getClassLoader().getResourceAsStream("regions.pdf");
+				CacheControl cc = new CacheControl();
+				cc.setMaxAge(500);
+				cc.setPrivate(true);
+				ResponseBuilder responseBuilder = Response.ok(IOUtils.toByteArray(inputStream)).cacheControl(cc);
+		        //File file = new File(FILE_PATH);
+				//ResponseBuilder responseBuilder = Response.ok((Object)file);
+				responseBuilder.header("Content-Disposition","attachment; filename=regions");
+				//responseBuilder.header("Content-Type", "application/pdf");
+				return responseBuilder.build();
+		}catch(Exception e){
+			return getResponseBuilder(Status.INTERNAL_SERVER_ERROR, "message", "Error Retrieving the data file").build();
+		}
 		
 	}
 	
